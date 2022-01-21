@@ -2,16 +2,19 @@ package be.bavodaniels.binance.api.endpoints.marketdata;
 
 import be.bavodaniels.binance.api.config.Endpoint;
 import be.bavodaniels.binance.api.endpoints.config.ApiConfig;
+import be.bavodaniels.binance.api.endpoints.marketdata.model.AggregateTrade;
 import be.bavodaniels.binance.api.endpoints.marketdata.model.OrderBook;
 import be.bavodaniels.binance.api.endpoints.marketdata.model.OrderBookLimit;
 import be.bavodaniels.binance.api.endpoints.marketdata.model.RecentTrade;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import feign.Feign;
 import feign.jackson.JacksonDecoder;
+import feign.jackson.JacksonEncoder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,6 +25,7 @@ class MarketDataEndpointTest {
     @BeforeEach
     void setUp() {
         endpoint = Feign.builder()
+                .encoder(new JacksonEncoder(List.of(new JavaTimeModule())))
                 .decoder(new JacksonDecoder(List.of(new JavaTimeModule())))
                 .target(MarketDataEndpoint.class, Endpoint.API.getValue());
     }
@@ -128,5 +132,95 @@ class MarketDataEndpointTest {
         assertThat(trades.get(0).price()).isNotNull();
         assertThat(trades.get(0).qty()).isNotNull();
         assertThat(trades.get(0).quoteQty()).isNotNull();
+    }
+
+    @Test
+    void aggregateTrades() {
+        List<AggregateTrade> trades = endpoint.getAggregateTrades("ETHBTC");
+
+        assertThat(trades).isNotNull();
+        assertThat(trades.get(0)).isNotNull();
+        assertThat(trades.get(0).firstTradeId()).isNotNull();
+        assertThat(trades.get(0).lastTradeId()).isNotNull();
+        assertThat(trades.get(0).isBestMatch()).isNotNull();
+        assertThat(trades.get(0).isMaker()).isNotNull();
+        assertThat(trades.get(0).quantity()).isNotNull();
+        assertThat(trades.get(0).price()).isNotNull();
+        assertThat(trades.get(0).time()).isNotNull();
+    }
+
+    @Test
+    void aggregateTrades_withLimit() {
+        List<AggregateTrade> trades = endpoint.getAggregateTrades("ETHBTC", 1);
+
+        assertThat(trades).isNotNull();
+        assertThat(trades.get(0)).isNotNull();
+        assertThat(trades.get(0).firstTradeId()).isNotNull();
+        assertThat(trades.get(0).lastTradeId()).isNotNull();
+        assertThat(trades.get(0).isBestMatch()).isNotNull();
+        assertThat(trades.get(0).isMaker()).isNotNull();
+        assertThat(trades.get(0).quantity()).isNotNull();
+        assertThat(trades.get(0).price()).isNotNull();
+        assertThat(trades.get(0).time()).isNotNull();
+    }
+
+    @Test
+    void aggregateTrades_withFromId() {
+        List<AggregateTrade> trades = endpoint.getAggregateTrades("ETHBTC", 1L);
+
+        assertThat(trades).isNotNull();
+        assertThat(trades.get(0)).isNotNull();
+        assertThat(trades.get(0).firstTradeId()).isNotNull();
+        assertThat(trades.get(0).lastTradeId()).isNotNull();
+        assertThat(trades.get(0).isBestMatch()).isNotNull();
+        assertThat(trades.get(0).isMaker()).isNotNull();
+        assertThat(trades.get(0).quantity()).isNotNull();
+        assertThat(trades.get(0).price()).isNotNull();
+        assertThat(trades.get(0).time()).isNotNull();
+    }
+
+    @Test
+    void aggregateTrades_withFromIdAndLimit() {
+        List<AggregateTrade> trades = endpoint.getAggregateTrades("ETHBTC", 1L, 1);
+
+        assertThat(trades).isNotNull();
+        assertThat(trades.get(0)).isNotNull();
+        assertThat(trades.get(0).firstTradeId()).isNotNull();
+        assertThat(trades.get(0).lastTradeId()).isNotNull();
+        assertThat(trades.get(0).isBestMatch()).isNotNull();
+        assertThat(trades.get(0).isMaker()).isNotNull();
+        assertThat(trades.get(0).quantity()).isNotNull();
+        assertThat(trades.get(0).price()).isNotNull();
+        assertThat(trades.get(0).time()).isNotNull();
+    }
+
+    @Test
+    void aggregateTrades_withStartTimeAndEndTime() {
+        List<AggregateTrade> trades = endpoint.getAggregateTrades("ETHBTC", System.currentTimeMillis()-100000, System.currentTimeMillis());
+
+        assertThat(trades).isNotNull();
+        assertThat(trades.get(0)).isNotNull();
+        assertThat(trades.get(0).firstTradeId()).isNotNull();
+        assertThat(trades.get(0).lastTradeId()).isNotNull();
+        assertThat(trades.get(0).isBestMatch()).isNotNull();
+        assertThat(trades.get(0).isMaker()).isNotNull();
+        assertThat(trades.get(0).quantity()).isNotNull();
+        assertThat(trades.get(0).price()).isNotNull();
+        assertThat(trades.get(0).time()).isNotNull();
+    }
+
+    @Test
+    void aggregateTrades_withStartTimeAndEndTimeAndLimit() {
+        List<AggregateTrade> trades = endpoint.getAggregateTrades("ETHBTC", System.currentTimeMillis()-10000,System.currentTimeMillis(), 1);
+
+        assertThat(trades).isNotNull();
+        assertThat(trades.get(0)).isNotNull();
+        assertThat(trades.get(0).firstTradeId()).isNotNull();
+        assertThat(trades.get(0).lastTradeId()).isNotNull();
+        assertThat(trades.get(0).isBestMatch()).isNotNull();
+        assertThat(trades.get(0).isMaker()).isNotNull();
+        assertThat(trades.get(0).quantity()).isNotNull();
+        assertThat(trades.get(0).price()).isNotNull();
+        assertThat(trades.get(0).time()).isNotNull();
     }
 }
