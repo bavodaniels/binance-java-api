@@ -81,4 +81,20 @@ public interface MarketDataEndpoint {
     @RequestLine("GET /api/v3/klines?symbol={symbol}&interval={interval}")
     List<KLine> getKLines(@Param("symbol") String symbol,
                           @Param(value = "interval", expander = KLineInterval.KLineIntervalExpander.class) KLineInterval interval);
+
+    @RequestLine("GET /api/v3/klines?symbol={symbol}&interval={interval}&startTime={startTime}")
+    List<KLine> getKLines(@Param("symbol") String symbol,
+                          @Param(value = "interval", expander = KLineInterval.KLineIntervalExpander.class) KLineInterval interval,
+                          @Param("startTime") Long startTime );
+
+    @RequestLine("GET /api/v3/klines?symbol={symbol}&interval={interval}&limit={limit}")
+    List<KLine> getKLines(@Param("symbol") String symbol,
+                          @Param(value = "interval", expander = KLineInterval.KLineIntervalExpander.class) KLineInterval interval,
+                          @Param("limit") int limit);
+
+    @RequestLine("GET /api/v3/klines?symbol={symbol}&interval={interval}&startTime={startTime}&limit={limit}")
+    List<KLine> getKLines(@Param("symbol") String symbol,
+                          @Param(value = "interval", expander = KLineInterval.KLineIntervalExpander.class) KLineInterval interval,
+                          @Param("startTime") Long startTime,
+                          @Param("limit") int limit);
 }

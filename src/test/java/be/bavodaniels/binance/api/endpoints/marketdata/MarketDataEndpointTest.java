@@ -12,6 +12,8 @@ import feign.jackson.JacksonEncoder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -228,6 +230,62 @@ class MarketDataEndpointTest {
 
         assertThat(klines).isNotNull()
                 .hasSize(500);
+        assertThat(klines.get(0).close()).isNotNull();
+        assertThat(klines.get(0).closeTime()).isNotNull();
+        assertThat(klines.get(0).high()).isNotNull();
+        assertThat(klines.get(0).low()).isNotNull();
+        assertThat(klines.get(0).numberOfTrades()).isNotNull();
+        assertThat(klines.get(0).open()).isNotNull();
+        assertThat(klines.get(0).openTime()).isNotNull();
+        assertThat(klines.get(0).quoteAssetVolume()).isNotNull();
+        assertThat(klines.get(0).takerBuyBaseAssetVolume()).isNotNull();
+        assertThat(klines.get(0).takerBuyQuoteAssetVolume()).isNotNull();
+    }
+
+    @Test
+    void testKLine_withLimit() {
+        List<KLine> klines = endpoint.getKLines("ETHBTC", KLineInterval.ONE_DAY, 1);
+
+        assertThat(klines).isNotNull()
+                .hasSize(1);
+        assertThat(klines.get(0).close()).isNotNull();
+        assertThat(klines.get(0).closeTime()).isNotNull();
+        assertThat(klines.get(0).high()).isNotNull();
+        assertThat(klines.get(0).low()).isNotNull();
+        assertThat(klines.get(0).numberOfTrades()).isNotNull();
+        assertThat(klines.get(0).open()).isNotNull();
+        assertThat(klines.get(0).openTime()).isNotNull();
+        assertThat(klines.get(0).quoteAssetVolume()).isNotNull();
+        assertThat(klines.get(0).takerBuyBaseAssetVolume()).isNotNull();
+        assertThat(klines.get(0).takerBuyQuoteAssetVolume()).isNotNull();
+    }
+
+    @Test
+    void testKLine_withStartTime() {
+        List<KLine> klines = endpoint.getKLines("ETHBTC", KLineInterval.ONE_DAY, LocalDateTime.now().minusDays(1L)
+                .toInstant(ZoneOffset.UTC).toEpochMilli());
+
+        assertThat(klines).isNotNull()
+                .hasSize(1);
+        assertThat(klines.get(0).close()).isNotNull();
+        assertThat(klines.get(0).closeTime()).isNotNull();
+        assertThat(klines.get(0).high()).isNotNull();
+        assertThat(klines.get(0).low()).isNotNull();
+        assertThat(klines.get(0).numberOfTrades()).isNotNull();
+        assertThat(klines.get(0).open()).isNotNull();
+        assertThat(klines.get(0).openTime()).isNotNull();
+        assertThat(klines.get(0).quoteAssetVolume()).isNotNull();
+        assertThat(klines.get(0).takerBuyBaseAssetVolume()).isNotNull();
+        assertThat(klines.get(0).takerBuyQuoteAssetVolume()).isNotNull();
+    }
+
+    @Test
+    void testKLine_withStartTimeAndLimit() {
+        List<KLine> klines = endpoint.getKLines("ETHBTC", KLineInterval.ONE_DAY, LocalDateTime.now().minusDays(2L)
+                .toInstant(ZoneOffset.UTC).toEpochMilli(), 1);
+
+        assertThat(klines).isNotNull()
+                .hasSize(1);
         assertThat(klines.get(0).close()).isNotNull();
         assertThat(klines.get(0).closeTime()).isNotNull();
         assertThat(klines.get(0).high()).isNotNull();
