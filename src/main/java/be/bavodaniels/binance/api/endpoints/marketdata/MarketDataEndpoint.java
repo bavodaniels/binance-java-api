@@ -1,10 +1,8 @@
 package be.bavodaniels.binance.api.endpoints.marketdata;
 
-import be.bavodaniels.binance.api.endpoints.marketdata.model.AggregateTrade;
-import be.bavodaniels.binance.api.endpoints.marketdata.model.OrderBook;
-import be.bavodaniels.binance.api.endpoints.marketdata.model.OrderBookLimit;
+import be.bavodaniels.binance.api.endpoints.general.model.KLineInterval;
+import be.bavodaniels.binance.api.endpoints.marketdata.model.*;
 import be.bavodaniels.binance.api.endpoints.marketdata.model.OrderBookLimit.OrderBookLimitExpander;
-import be.bavodaniels.binance.api.endpoints.marketdata.model.RecentTrade;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
@@ -79,4 +77,8 @@ public interface MarketDataEndpoint {
                                             @Param("startTime") Long startTime,
                                             @Param("endTime") Long endTime,
                                             @Param("limit") int limit);
+
+    @RequestLine("GET /api/v3/klines?symbol={symbol}&interval={interval}")
+    List<KLine> getKLines(@Param("symbol") String symbol,
+                          @Param(value = "interval", expander = KLineInterval.KLineIntervalExpander.class) KLineInterval interval);
 }

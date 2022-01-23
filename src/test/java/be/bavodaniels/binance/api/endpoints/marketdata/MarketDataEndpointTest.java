@@ -2,19 +2,16 @@ package be.bavodaniels.binance.api.endpoints.marketdata;
 
 import be.bavodaniels.binance.api.config.Endpoint;
 import be.bavodaniels.binance.api.endpoints.config.ApiConfig;
-import be.bavodaniels.binance.api.endpoints.marketdata.model.AggregateTrade;
-import be.bavodaniels.binance.api.endpoints.marketdata.model.OrderBook;
-import be.bavodaniels.binance.api.endpoints.marketdata.model.OrderBookLimit;
-import be.bavodaniels.binance.api.endpoints.marketdata.model.RecentTrade;
+import be.bavodaniels.binance.api.endpoints.general.model.KLineInterval;
+import be.bavodaniels.binance.api.endpoints.marketdata.model.*;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import feign.Feign;
+import feign.Logger;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,6 +24,7 @@ class MarketDataEndpointTest {
         endpoint = Feign.builder()
                 .encoder(new JacksonEncoder(List.of(new JavaTimeModule())))
                 .decoder(new JacksonDecoder(List.of(new JavaTimeModule())))
+                .logLevel(Logger.Level.FULL)
                 .target(MarketDataEndpoint.class, Endpoint.API.getValue());
     }
 
@@ -222,5 +220,23 @@ class MarketDataEndpointTest {
         assertThat(trades.get(0).quantity()).isNotNull();
         assertThat(trades.get(0).price()).isNotNull();
         assertThat(trades.get(0).time()).isNotNull();
+    }
+
+    @Test
+    void testKLine() {
+        List<KLine> klines = endpoint.getKLines("ETHBTC", KLineInterval.ONE_DAY);
+
+        assertThat(klines).isNotNull()
+                .hasSize(500);
+        assertThat(klines.get(0).close()).isNotNull();
+        assertThat(klines.get(0).closeTime()).isNotNull();
+        assertThat(klines.get(0).high()).isNotNull();
+        assertThat(klines.get(0).low()).isNotNull();
+        assertThat(klines.get(0).numberOfTrades()).isNotNull();
+        assertThat(klines.get(0).open()).isNotNull();
+        assertThat(klines.get(0).openTime()).isNotNull();
+        assertThat(klines.get(0).quoteAssetVolume()).isNotNull();
+        assertThat(klines.get(0).takerBuyBaseAssetVolume()).isNotNull();
+        assertThat(klines.get(0).takerBuyQuoteAssetVolume()).isNotNull();
     }
 }

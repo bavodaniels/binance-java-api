@@ -1,5 +1,8 @@
 package be.bavodaniels.binance.api.endpoints.general.model;
 
+import be.bavodaniels.binance.api.endpoints.marketdata.model.OrderBookLimit;
+import com.fasterxml.jackson.annotation.JsonValue;
+import feign.Param;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -23,4 +26,12 @@ public enum KLineInterval {
     ONE_MONTH("1M");
 
     private final String value;
+
+    public static final class KLineIntervalExpander implements Param.Expander{
+
+        @Override
+        public String expand(Object value) {
+            return String.valueOf(((KLineInterval)value).getValue());
+        }
+    }
 }
