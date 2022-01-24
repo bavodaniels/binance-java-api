@@ -16,7 +16,7 @@ class GeneralEndpointTest {
     void setUp() {
         endpoint = Feign.builder()
                 .decoder(new JacksonDecoder())
-                .target(GeneralEndpoint.class, Endpoint.API.getValue());
+                .target(GeneralEndpoint.class, Endpoint.TESTNET.getValue());
     }
 
     @Test

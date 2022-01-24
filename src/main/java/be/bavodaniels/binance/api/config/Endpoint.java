@@ -9,7 +9,8 @@ public enum Endpoint {
     API("https://api.binance.com"),
     API1("https://api1.binance.com"),
     API2("https://api2.binance.com"),
-    API3("https://api3.binance.com");
+    API3("https://api3.binance.com"),
+    TESTNET("https://testnet.binance.vision");
 
     private final String value;
 }

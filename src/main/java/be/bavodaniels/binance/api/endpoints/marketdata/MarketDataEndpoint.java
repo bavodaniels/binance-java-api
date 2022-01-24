@@ -100,4 +100,11 @@ public interface MarketDataEndpoint {
 
     @RequestLine("GET /api/v3/avgPrice?symbol={symbol}")
     AveragePrice getAveragePrice(@Param("symbol") String symbol);
+
+    @RequestLine("GET /api/v3/ticker/24hr?symbol={symbol}")
+    TickerChangeStatistics get24HourTickerChangeStatistics(@Param("symbol") String symbol);
+
+    //GET /api/v3/ticker/price
+    //GET /api/v3/ticker/bookTicker
+
 }
