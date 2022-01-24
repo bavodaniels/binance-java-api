@@ -297,4 +297,13 @@ class MarketDataEndpointTest {
         assertThat(klines.get(0).takerBuyBaseAssetVolume()).isNotNull();
         assertThat(klines.get(0).takerBuyQuoteAssetVolume()).isNotNull();
     }
+
+    @Test
+    void getAveragePrice() {
+        AveragePrice avgPrice = endpoint.getAveragePrice("ETHBTC");
+
+        assertThat(avgPrice).isNotNull();
+        assertThat(avgPrice.price()).isNotNull();
+        assertThat(avgPrice.mins()).isNotNull();
+    }
 }

@@ -97,4 +97,7 @@ public interface MarketDataEndpoint {
                           @Param(value = "interval", expander = KLineInterval.KLineIntervalExpander.class) KLineInterval interval,
                           @Param("startTime") Long startTime,
                           @Param("limit") int limit);
+
+    @RequestLine("GET /api/v3/avgPrice?symbol={symbol}")
+    AveragePrice getAveragePrice(@Param("symbol") String symbol);
 }
