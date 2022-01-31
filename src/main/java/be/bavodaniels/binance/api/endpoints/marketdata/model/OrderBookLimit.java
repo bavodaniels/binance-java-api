@@ -22,11 +22,8 @@ public enum OrderBookLimit {
         return limit;
     }
 
-    public static final class OrderBookLimitExpander implements Expander {
-
-        @Override
-        public String expand(Object value) {
-            return String.valueOf(((OrderBookLimit)value).getLimit());
-        }
+    @Override
+    public String toString() {
+        return String.valueOf(getLimit());
     }
 }

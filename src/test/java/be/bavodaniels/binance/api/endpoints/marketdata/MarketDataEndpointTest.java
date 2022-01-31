@@ -32,7 +32,7 @@ class MarketDataEndpointTest {
 
     @Test
     void orderbook_withLimit() {
-        OrderBook orderbook = endpoint.getOrderbook("ETHBTC", OrderBookLimit.FIVE);
+        OrderBook orderbook = endpoint.getOrderbook(new DepthRequest("ETHBTC", OrderBookLimit.FIVE));
 
         assertThat(orderbook).isNotNull();
         assertThat(orderbook.lastUpdateId()).isNotEqualTo(0L);
@@ -48,7 +48,7 @@ class MarketDataEndpointTest {
 
     @Test
     void orderbook() {
-        OrderBook orderbook = endpoint.getOrderbook("ETHBTC");
+        OrderBook orderbook = endpoint.getOrderbook(new DepthRequest("ETHBTC"));
 
         assertThat(orderbook).isNotNull();
         assertThat(orderbook.lastUpdateId()).isNotEqualTo(0L);
@@ -64,7 +64,7 @@ class MarketDataEndpointTest {
 
     @Test
     void recentTrades_withLimit() {
-        List<RecentTrade> trades = endpoint.getRecentTrades("ETHBTC", 1);
+        List<RecentTrade> trades = endpoint.getRecentTrades(new TradeRequest("ETHBTC", OrderBookLimit.FIFTY));
 
         assertThat(trades).isNotNull();
         assertThat(trades.get(0)).isNotNull();
@@ -76,7 +76,7 @@ class MarketDataEndpointTest {
 
     @Test
     void recentTrades() {
-        List<RecentTrade> trades = endpoint.getRecentTrades("ETHBTC");
+        List<RecentTrade> trades = endpoint.getRecentTrades(new TradeRequest("ETHBTC"));
 
         assertThat(trades).isNotNull();
         assertThat(trades.get(0)).isNotNull();
@@ -88,7 +88,7 @@ class MarketDataEndpointTest {
 
     @Test
     void historicalTrades() {
-        List<RecentTrade> trades = endpoint.getHistoricalTrades("ETHBTC", config.getApiKey());
+        List<RecentTrade> trades = endpoint.getHistoricalTrades(new HistoricalTradesRequest("ETHBTC"), config.getApiKey());
 
         assertThat(trades).isNotNull();
         assertThat(trades.get(0)).isNotNull();
@@ -100,7 +100,7 @@ class MarketDataEndpointTest {
 
     @Test
     void historicalTrades_withLimit() {
-        List<RecentTrade> trades = endpoint.getHistoricalTrades("ETHBTC", 1, config.getApiKey());
+        List<RecentTrade> trades = endpoint.getHistoricalTrades(new HistoricalTradesRequest("ETHBTC", 1), config.getApiKey());
 
         assertThat(trades).isNotNull();
         assertThat(trades.get(0)).isNotNull();
@@ -112,7 +112,7 @@ class MarketDataEndpointTest {
 
     @Test
     void historicalTrades_withFromId() {
-        List<RecentTrade> trades = endpoint.getHistoricalTrades("ETHBTC", 1L, config.getApiKey()    );
+        List<RecentTrade> trades = endpoint.getHistoricalTrades(new HistoricalTradesRequest("ETHBTC", 1L), config.getApiKey()    );
 
         assertThat(trades).isNotNull();
         assertThat(trades.get(0)).isNotNull();
@@ -124,7 +124,7 @@ class MarketDataEndpointTest {
 
     @Test
     void historicalTrades_withLimitAndFromId() {
-        List<RecentTrade> trades = endpoint.getHistoricalTrades("ETHBTC", 1, 1L, config.getApiKey());
+        List<RecentTrade> trades = endpoint.getHistoricalTrades(new HistoricalTradesRequest("ETHBTC", 1, 1L), config.getApiKey());
 
         assertThat(trades).isNotNull();
         assertThat(trades.get(0)).isNotNull();
@@ -136,7 +136,9 @@ class MarketDataEndpointTest {
 
     @Test
     void aggregateTrades() {
-        List<AggregateTrade> trades = endpoint.getAggregateTrades("ETHBTC");
+        List<AggregateTrade> trades = endpoint.getAggregateTrades(AggregateTradesRequest.builder()
+                        .symbol("ETHBTC")
+                .build());
 
         assertThat(trades).isNotNull();
         assertThat(trades.get(0)).isNotNull();

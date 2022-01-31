@@ -5,7 +5,15 @@ public class ApiConfig {
         return System.getenv("BINANCE_API");
     }
 
+    public String getSecret(){
+        return System.getenv("BINANCE_API_SECRET");
+    }
+
     public String getTestNetApi(){
         return System.getenv("BINANCE_API_TEST");
+    }
+
+    public String getTestNetSecret(){
+        return System.getenv("BINANCE_API_TEST_SECRET");
     }
 }
