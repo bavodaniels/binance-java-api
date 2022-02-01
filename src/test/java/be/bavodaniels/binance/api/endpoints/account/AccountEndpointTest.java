@@ -62,5 +62,6 @@ class AccountEndpointTest {
                         null,
                         null),
                 apiConfig.getTestNetApi());
+
     }
 }
