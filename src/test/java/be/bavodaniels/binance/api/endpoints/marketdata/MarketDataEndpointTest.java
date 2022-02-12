@@ -136,9 +136,7 @@ class MarketDataEndpointTest {
 
     @Test
     void aggregateTrades() {
-        List<AggregateTrade> trades = endpoint.getAggregateTrades(AggregateTradesRequest.builder()
-                        .symbol("ETHBTC")
-                .build());
+        List<AggregateTrade> trades = endpoint.getAggregateTrades(AggregateTradesRequest.build("ETHBTC"));
 
         assertThat(trades).isNotNull();
         assertThat(trades.get(0)).isNotNull();
@@ -153,7 +151,7 @@ class MarketDataEndpointTest {
 
     @Test
     void aggregateTrades_withLimit() {
-        List<AggregateTrade> trades = endpoint.getAggregateTrades("ETHBTC", 1);
+        List<AggregateTrade> trades = endpoint.getAggregateTrades(AggregateTradesRequest.build("ETHBTC", 1));
 
         assertThat(trades).isNotNull();
         assertThat(trades.get(0)).isNotNull();
@@ -166,139 +164,6 @@ class MarketDataEndpointTest {
         assertThat(trades.get(0).time()).isNotNull();
     }
 
-    @Test
-    void aggregateTrades_withFromId() {
-        List<AggregateTrade> trades = endpoint.getAggregateTrades("ETHBTC", 1L);
-
-        assertThat(trades).isNotNull();
-        assertThat(trades.get(0)).isNotNull();
-        assertThat(trades.get(0).firstTradeId()).isNotNull();
-        assertThat(trades.get(0).lastTradeId()).isNotNull();
-        assertThat(trades.get(0).isBestMatch()).isNotNull();
-        assertThat(trades.get(0).isMaker()).isNotNull();
-        assertThat(trades.get(0).quantity()).isNotNull();
-        assertThat(trades.get(0).price()).isNotNull();
-        assertThat(trades.get(0).time()).isNotNull();
-    }
-
-    @Test
-    void aggregateTrades_withFromIdAndLimit() {
-        List<AggregateTrade> trades = endpoint.getAggregateTrades("ETHBTC", 1L, 1);
-
-        assertThat(trades).isNotNull();
-        assertThat(trades.get(0)).isNotNull();
-        assertThat(trades.get(0).firstTradeId()).isNotNull();
-        assertThat(trades.get(0).lastTradeId()).isNotNull();
-        assertThat(trades.get(0).isBestMatch()).isNotNull();
-        assertThat(trades.get(0).isMaker()).isNotNull();
-        assertThat(trades.get(0).quantity()).isNotNull();
-        assertThat(trades.get(0).price()).isNotNull();
-        assertThat(trades.get(0).time()).isNotNull();
-    }
-
-    @Test
-    void aggregateTrades_withStartTimeAndEndTime() {
-        List<AggregateTrade> trades = endpoint.getAggregateTrades("ETHBTC", System.currentTimeMillis()-100000, System.currentTimeMillis());
-
-        assertThat(trades).isNotNull();
-        assertThat(trades.get(0)).isNotNull();
-        assertThat(trades.get(0).firstTradeId()).isNotNull();
-        assertThat(trades.get(0).lastTradeId()).isNotNull();
-        assertThat(trades.get(0).isBestMatch()).isNotNull();
-        assertThat(trades.get(0).isMaker()).isNotNull();
-        assertThat(trades.get(0).quantity()).isNotNull();
-        assertThat(trades.get(0).price()).isNotNull();
-        assertThat(trades.get(0).time()).isNotNull();
-    }
-
-    @Test
-    void aggregateTrades_withStartTimeAndEndTimeAndLimit() {
-        List<AggregateTrade> trades = endpoint.getAggregateTrades("ETHBTC", System.currentTimeMillis()-10000,System.currentTimeMillis(), 1);
-
-        assertThat(trades).isNotNull();
-        assertThat(trades.get(0)).isNotNull();
-        assertThat(trades.get(0).firstTradeId()).isNotNull();
-        assertThat(trades.get(0).lastTradeId()).isNotNull();
-        assertThat(trades.get(0).isBestMatch()).isNotNull();
-        assertThat(trades.get(0).isMaker()).isNotNull();
-        assertThat(trades.get(0).quantity()).isNotNull();
-        assertThat(trades.get(0).price()).isNotNull();
-        assertThat(trades.get(0).time()).isNotNull();
-    }
-
-    @Test
-    void testKLine() {
-        List<KLine> klines = endpoint.getKLines("ETHBTC", KLineInterval.ONE_DAY);
-
-        assertThat(klines).isNotNull()
-                .hasSize(500);
-        assertThat(klines.get(0).close()).isNotNull();
-        assertThat(klines.get(0).closeTime()).isNotNull();
-        assertThat(klines.get(0).high()).isNotNull();
-        assertThat(klines.get(0).low()).isNotNull();
-        assertThat(klines.get(0).numberOfTrades()).isNotNull();
-        assertThat(klines.get(0).open()).isNotNull();
-        assertThat(klines.get(0).openTime()).isNotNull();
-        assertThat(klines.get(0).quoteAssetVolume()).isNotNull();
-        assertThat(klines.get(0).takerBuyBaseAssetVolume()).isNotNull();
-        assertThat(klines.get(0).takerBuyQuoteAssetVolume()).isNotNull();
-    }
-
-    @Test
-    void testKLine_withLimit() {
-        List<KLine> klines = endpoint.getKLines("ETHBTC", KLineInterval.ONE_DAY, 1);
-
-        assertThat(klines).isNotNull()
-                .hasSize(1);
-        assertThat(klines.get(0).close()).isNotNull();
-        assertThat(klines.get(0).closeTime()).isNotNull();
-        assertThat(klines.get(0).high()).isNotNull();
-        assertThat(klines.get(0).low()).isNotNull();
-        assertThat(klines.get(0).numberOfTrades()).isNotNull();
-        assertThat(klines.get(0).open()).isNotNull();
-        assertThat(klines.get(0).openTime()).isNotNull();
-        assertThat(klines.get(0).quoteAssetVolume()).isNotNull();
-        assertThat(klines.get(0).takerBuyBaseAssetVolume()).isNotNull();
-        assertThat(klines.get(0).takerBuyQuoteAssetVolume()).isNotNull();
-    }
-
-    @Test
-    void testKLine_withStartTime() {
-        List<KLine> klines = endpoint.getKLines("ETHBTC", KLineInterval.ONE_DAY, LocalDateTime.now().minusDays(1L)
-                .toInstant(ZoneOffset.UTC).toEpochMilli());
-
-        assertThat(klines).isNotNull()
-                .hasSize(1);
-        assertThat(klines.get(0).close()).isNotNull();
-        assertThat(klines.get(0).closeTime()).isNotNull();
-        assertThat(klines.get(0).high()).isNotNull();
-        assertThat(klines.get(0).low()).isNotNull();
-        assertThat(klines.get(0).numberOfTrades()).isNotNull();
-        assertThat(klines.get(0).open()).isNotNull();
-        assertThat(klines.get(0).openTime()).isNotNull();
-        assertThat(klines.get(0).quoteAssetVolume()).isNotNull();
-        assertThat(klines.get(0).takerBuyBaseAssetVolume()).isNotNull();
-        assertThat(klines.get(0).takerBuyQuoteAssetVolume()).isNotNull();
-    }
-
-    @Test
-    void testKLine_withStartTimeAndLimit() {
-        List<KLine> klines = endpoint.getKLines("ETHBTC", KLineInterval.ONE_DAY, LocalDateTime.now().minusDays(2L)
-                .toInstant(ZoneOffset.UTC).toEpochMilli(), 1);
-
-        assertThat(klines).isNotNull()
-                .hasSize(1);
-        assertThat(klines.get(0).close()).isNotNull();
-        assertThat(klines.get(0).closeTime()).isNotNull();
-        assertThat(klines.get(0).high()).isNotNull();
-        assertThat(klines.get(0).low()).isNotNull();
-        assertThat(klines.get(0).numberOfTrades()).isNotNull();
-        assertThat(klines.get(0).open()).isNotNull();
-        assertThat(klines.get(0).openTime()).isNotNull();
-        assertThat(klines.get(0).quoteAssetVolume()).isNotNull();
-        assertThat(klines.get(0).takerBuyBaseAssetVolume()).isNotNull();
-        assertThat(klines.get(0).takerBuyQuoteAssetVolume()).isNotNull();
-    }
 
     @Test
     void getAveragePrice() {

@@ -27,11 +27,8 @@ public enum KLineInterval {
 
     private final String value;
 
-    public static final class KLineIntervalExpander implements Param.Expander{
-
-        @Override
-        public String expand(Object value) {
-            return String.valueOf(((KLineInterval)value).getValue());
-        }
+    @Override
+    public String toString() {
+        return value;
     }
 }

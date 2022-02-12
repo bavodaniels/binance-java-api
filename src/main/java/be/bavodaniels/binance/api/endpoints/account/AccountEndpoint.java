@@ -20,7 +20,4 @@ public interface AccountEndpoint {
     @RequestLine(value = "POST /api/v3/order/test")
     void postTestOrder(@QueryMap PostOrderRequest orderRequest,
                                 @Param("apiKey") String apiKey);
-
-    @RequestLine("GET /api/v3/order")
-    void queryOrder();
 }
