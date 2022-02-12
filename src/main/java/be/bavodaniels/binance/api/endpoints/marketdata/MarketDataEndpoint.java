@@ -9,6 +9,7 @@ import feign.Param;
 import feign.QueryMap;
 import feign.RequestLine;
 
+import javax.swing.*;
 import java.util.Date;
 import java.util.List;
 
@@ -36,6 +37,11 @@ public interface MarketDataEndpoint {
     @RequestLine("GET /api/v3/ticker/24hr?symbol={symbol}")
     TickerChangeStatistics get24HourTickerChangeStatistics(@Param("symbol") String symbol);
 
+    @RequestLine("GET /api/v3/ticker/price?symbol={symbol}")
+    SymbolPrice getPrice(@Param("symbol") String symbol);
+
+    @RequestLine("GET /api/v3/ticker/price")
+    List<SymbolPrice> getAllPrices();
     //GET /api/v3/ticker/price
     //GET /api/v3/ticker/bookTicker
 

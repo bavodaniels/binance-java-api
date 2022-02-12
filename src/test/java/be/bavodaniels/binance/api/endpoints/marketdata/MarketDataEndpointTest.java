@@ -12,6 +12,7 @@ import feign.jackson.JacksonEncoder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.swing.*;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
@@ -172,5 +173,22 @@ class MarketDataEndpointTest {
         assertThat(avgPrice).isNotNull();
         assertThat(avgPrice.price()).isNotNull();
         assertThat(avgPrice.mins()).isNotNull();
+    }
+
+    @Test
+    void testGetPrice() {
+        SymbolPrice price = endpoint.getPrice("ETHBTC");
+
+        assertThat(price).isNotNull();
+        assertThat(price.price()).isNotNull();
+        assertThat(price.symbol()).isNotNull();
+    }
+
+    @Test
+    void testGetAllPrices() {
+        List<SymbolPrice> prices = endpoint.getAllPrices();
+
+        assertThat(prices).isNotNull()
+                .isNotEmpty();
     }
 }
